@@ -6,7 +6,7 @@ This GitHub repository is dedicated to a comprehensive sentiment analysis projec
 
 The project is divided into several parts, each addressing specific aspects of sentiment analysis and data exploration:
 
-- **Part 1: Data Exploration:** In this section, we delve into the dataset's distribution, identify top reviewers, analyze review text lengths, and spotlight the highest-rated products and brands.
+- **Part 1: Data Exploration:** In this section, we dive into the dataset's distribution, identify top reviewers, analyze review text lengths, and spotlight the highest-rated products and brands.
 
 - **Part 2: Aspect-Based Sentiment Analysis:** Part two is all about aspect-based sentiment analysis. We aim to understand how users feel about product warranties. This section provides detailed instructions on tackling this task.
 
@@ -24,10 +24,6 @@ The project is divided into several parts, each addressing specific aspects of s
 ## Contribution and Collaboration
 
 Feel free to fork this repository, contribute to the project, and adapt it to your specific needs. We encourage collaboration and innovation in the field of sentiment analysis. Best of luck with your project!
-
-## License
-
-This project is licensed under the **MIT License**. You are welcome to use, modify, and distribute it as needed.
 
 ## Acknowledgments
 
