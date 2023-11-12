@@ -41,6 +41,8 @@ from keras.utils import to_categorical
 # from tensorflow.keras.optimizers import RMSprop
 # from tensorflow.keras.preprocessing.text import Tokenizer
 # from tensorflow.keras.preprocessing.sequence import pad_sequences
+from transformers import pipeline
+
 
 
 
@@ -56,6 +58,45 @@ report_choice = st.sidebar.selectbox("Select a Problem", ["Problem 1", "Problem 
 
 if report_choice == "Problem 1":
     st.header("Problem 1")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -110,7 +151,7 @@ if report_choice == "Problem 2":
 
 
         st.subheader("Which question should we go for first ?")
-        question_num = st.selectbox(["Question 1", "Question 2", "Question 3", "Question 4", "Question 5", "Question 6"])
+        question_num = st.selectbox("Choose the question", ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5", "Question 6", "Furthure analysis"])
 
         if question_num == "Question 1":
             st.header("First let's see the distribution of overall rating's :")
@@ -186,7 +227,7 @@ if report_choice == "Problem 2":
                 """)
 
         if question_num == "Question 4":
-            st.header("Lets see the histogram of text length :")
+            st.subheader("Lets see the histogram of text length :")
 
 
             # code 
@@ -202,6 +243,268 @@ if report_choice == "Problem 2":
             # end code 
 
             st.pyplot(plt)
+
+
+            st.subheader("Now to find the filter boundaries with the IQR method :")
+
+            # code
+
+            fig = plt.figure(figsize =(10, 7))
+            ax = fig.add_axes([0, 0, 1, 1])
+            bp = ax.boxplot((train["text_length"]))
+            m = np.mean(train["text_length"])
+            q3, q1 = np.percentile(train["text_length"], [75 ,25])
+            iqr = q3 - q1
+            lower = m - 1.5*iqr
+            upper = m + 1.5*iqr
+
+            # end code
+
+            st.pyplot(plt)
+
+            st.write("And the bonds would be :")
+            st.write((lower, upper))
+
+            st.write("We don't have a -5 characters long word, so we will consider the lower bound as 0.")
+
+            # code 
+
+            filtered_data = train[(train['text_length'] >= 0) & (train['text_length'] <= upper)]
+
+            plt.figure(figsize=(10, 6))
+            plt.hist(filtered_data['text_length'], bins=30, color='skyblue', edgecolor="black")
+            plt.title('Histogram of Text Length (Filtered)')
+            plt.xlabel('Text Length (Number of Characters)')
+            plt.ylabel('Frequency')
+
+            # end code 
+
+
+            st.pyplot(plt)
+
+            st.write("""Based on the analysis of the histogram of text lengths, it seems that setting a constraint on the text length during modeling could be beneficial. 
+
+                        The filtered histogram with a minimum of 0 characters and a maximum of approximately 1250 characters resulted in a smoother distribution of text lengths.
+
+                        Therefore, it is advisable to impose constraints on the text length during modeling.""")
+            
+            st.write("""After a little explanatory data review you will find out that the min count of characters used in a comment is 200 and therefore our actual interval is (200, 1250) characters.""")
+
+
+        if question_num == "Question 5":
+            st.subheader("First lets see the 10 most five stars :")
+
+            # code 
+
+            t10df = pd.read_csv("t10df.csv")
+
+            # end code
+
+
+            st.dataframe(t10df)
+
+
+        if question_num == "Question 6":
+            st.subheader("First lets see the 10 most reviewed brands and their score mean :")
+
+            # code 
+
+            top_10_brands = pd.read_csv("top_10_brands.csv")
+
+            # end code
+
+
+            st.dataframe(top_10_brands)
+
+        if question_num == "Furthure analysis":
+            st.subheader("Now we will go for some general and statistical overview on our train data :")
+            st.write("""In this view we can see that "overall" is really imbalanced in favor of 5 stars, "vote" is really imbalanced in favor of 0s, and "verified" is really imbalanced in favor of 1s.
+
+                        Also most of our data is gathered before 2017, and our text lenghts vary a lot due to the respective std.""")
+
+            Hypothesis_choice = st.selectbox("Select a Hypothesis", ["Hypothesis 1", "Hypothesis 2", "Hypothesis 3", "Hypothesis 4"])
+
+
+            if Hypothesis_choice == "Hypothesis 1":
+                st.subheader("What are we testing ?")
+                st.subheader("Is overall affected by weekday ?")
+
+                st.image("H1.png", caption="over all-frequency bar chart", use_column_width=True)
+
+                st.write("""We already knew that this column isn't normal so we will use U-test for hypothesis testing.
+
+                            First we will generate the data to compare weekdays and weekends and then we will use the U-test to do the Hypothesis testing:
+
+                            X: weekends, Y: weekdays
+
+                            H0 : μx < μy
+
+                            H1 : μx >= μy""")
+                
+
+                st.write("And the P_value is : 0.8474923496425621")
+
+                st.write("We can say that people buying on weekdays are more likely to rate the product higher with a pretty good confidence level!")
+                st.write("""As you can see in numbers, weekends have a higher mean and a lower std meaning that they are really likely to be greater as in overall rating.
+
+                            (Considering different sample sizes in a U-test)""")
+
+
+
+
+
+
+            if Hypothesis_choice == "Hypothesis 2":
+                st.subheader("What are we testing ?")
+                st.subheader("Is text lenght affected by weekdays ?")
+
+                st.image("H2.png", caption="text length-frequency bar chart", use_column_width=True)
+
+                st.write("""We already knew that this column isn't normal so we will use U-test for hypothesis testing.
+
+                            First we will generate the data to compare weekdays and weekends and then we will use the U-test to do the Hypothesis testing:
+
+                            X: weekends, Y: weekdays
+
+                            H0 : μx < μy
+
+                            H1 : μx >= μy""")
+                
+
+                st.write("And the P_value is : 0.0023741145530308443")
+
+                st.write("""As you can see, this hypothesis is rejected due to lack of evidence and therefore we can't come to the result that weekdays comments are longer.
+
+                            Let's see if the opposite is true though:""")
+                
+                st.write("And the P_value of the opposite test is : 0.9976258855439618")
+                
+                st.write("""So we can say that comments on weekends are longer with a very vast confidence interval. And it kinda makes sense!""")
+                st.write("And it has a greater mean, smaller std.")
+
+
+
+
+
+
+            
+            if Hypothesis_choice == "Hypothesis 3":
+                st.subheader("What are we testing ?")
+                st.subheader("Is overall affected by text length ?")
+
+                st.image("H3.png", caption="over all-frequency bar chart", use_column_width=True)
+
+                st.write("""We already knew that this column isn't normal so we will use U-test for hypothesis testing.
+
+                            First we will generate the data to compare weekdays and weekends and then we will use the U-test to do the Hypothesis testing:
+
+                            X: after median, Y: before median
+
+                            H0 : μx < μy
+
+                            H1 : μx >= μy""")
+                
+
+                st.write("Due to massive number of outliers, the mean is pretty biased so we will use median to determine which half a comment is.")
+                st.write("And it would be : 407.0")
+
+                st.write("And the P_value is : 1.0")
+
+                st.write("So we can say that the more a customer is satisfied with a product, the less thay bother to type long comments!")
+                st.write("""Unlike the other hypothesis that we have already discussed this time, the std of the greater class is greaater but the mean difference is so big that the respective bias doesen't afffect the U-test result.""")
+                
+
+
+
+            if Hypothesis_choice == "Hypothesis 4":
+                st.subheader("What are we testing ?")
+                st.subheader("Is overall affected by verification status ?")
+
+                st.image("H4.png", caption="over all-frequency bar chart", use_column_width=True)
+
+                st.write("""We already knew that this column isn't normal so we will use U-test for hypothesis testing.
+
+                            First we will generate the data to compare weekdays and weekends and then we will use the U-test to do the Hypothesis testing:
+
+                            X: not-verified, Y: verified
+
+                            H0 : μx < μy
+
+                            H1 : μx >= μy""")
+                
+
+                st.write("And the P_value is : 1.0")
+
+                st.write("So we can say that verified comments are generally the ones that have a higher overall score!")
+
+
+
+
+
+    if part_choice == "Part 2":
+        st.subheader("In this part we want to collect the opinions in which discussions about product warranties (such as guarantee, warranty, etc.)")
+        choice = st.selectbox("Select a KPI", ["Garante", "Price", "Safety"])
+
+        if choice == "Garante":
+            grouped = pd.read_csv("Garante.csv")
+            st.subheader("First lets take a look at the data frame :")
+            st.dataframe(grouped)
+
+            st.subheader("Top 15 Guarantee Wise:")
+            st.dataframe(grouped.head(15))
+
+
+            st.subheader("Worst 15 Guarantee Wise:")
+            st.dataframe(grouped.tail(15))
+
+
+            st.subheader("And the stacked bar chart :")
+            st.image("Garante.png", caption="stacked bar chart", use_column_width=True)   
+
+
+        if choice == "Price":
+            grouped = pd.read_csv("Price.csv")
+            st.subheader("The data frame :")
+            st.dataframe(grouped)
+
+            st.subheader("Top 15 Price Wise:")
+            st.dataframe(grouped.head(15))
+
+
+            st.subheader("Worst 15 Price Wise:")
+            st.dataframe(grouped.tail(15))
+
+
+            st.subheader("And the stacked bar chart :")
+            st.image("Price.png", caption="stacked bar chart", use_column_width=True)   
+
+
+        if choice == "Safety":
+            grouped = pd.read_csv("Safety.csv")
+            st.subheader("The data frame per usual :")
+            st.dataframe(grouped)
+
+            st.subheader("Top 15 Safety Wise:")
+            st.dataframe(grouped.head(15))
+
+
+            st.subheader("Worst 15 Safety Wise:")
+            st.dataframe(grouped.tail(15))
+
+
+            st.subheader("And the stacked bar chart :")
+            st.image("Safety.png", caption="stacked bar chart", use_column_width=True)   
+
+
+        st.subheader("And we can see these all togheter for better analysis :")
+        st.image("Conclusion.png", caption="stacked bar chart", use_column_width=True)  
+        
+
+
+
+
+
+
 
 
 
@@ -248,7 +551,7 @@ if report_choice == "Problem 2":
 
 
         st.subheader("Choose a Model to Display:")
-        model_choice = st.selectbox("Select a Model", ["SNN", "CNN", "RNN (LSTM)"])
+        model_choice = st.selectbox("Select a Model", ["SNN", "CNN", "RNN (LSTM)", "Test"])
 
 
 
@@ -327,6 +630,21 @@ if report_choice == "Problem 2":
                 """)
             st.subheader("And its accuracy : 0.5084")
 
+
+
+
+        if model_choice == "Test":
+            st.subheader("Now to test this hands on, we have this test box :")
+            pipe = pipeline("text-classification", model="mrm8488/distilroberta-finetuned-financial-news-sentiment-analysis")
+
+            user_input = st.text_input("Enter your text here:")
+
+            if user_input:
+
+                result = pipe(user_input)[0]
+                label = result['label']
+                score = result['score'] * 100
+                st.write(f"The example is {score:.2f}% {label}")
 
 
 
