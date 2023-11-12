@@ -58,41 +58,194 @@ report_choice = st.sidebar.selectbox("Select a Problem", ["Problem 1", "Problem 
 
 if report_choice == "Problem 1":
     st.header("Problem 1")
+    st.subheader("So for this part we have used a couple of models")
+    model_choice = st.selectbox("Which model should we view first ?", ["Model 1 (Resnet)", "Model 2 (Efficient net 1)", "Model 3 (Efficient net 2)", "Model 4 (Convex)"])
+
+    if model_choice == "Model 1 (Resnet)":
+        st.subheader("First lets view the model summary :")
+        st.write("""Model: "model_1"
+                    __________________________________________________________________________________________________
+                    Layer (type)                Output Shape                 Param #   Connected to                  
+                    ==================================================================================================
+                    input_2 (InputLayer)        [(None, 224, 224, 3)]        0         []                            
+                                                                                                                    
+                    conv1_pad (ZeroPadding2D)   (None, 230, 230, 3)          0         ['input_2[0][0]']             
+                                                                                                                    
+                    conv1_conv (Conv2D)         (None, 112, 112, 64)         9472      ['conv1_pad[0][0]']           
+                                                                                                                    
+                    pool1_pad (ZeroPadding2D)   (None, 114, 114, 64)         0         ['conv1_conv[0][0]']          
+                                                                                                                    
+                    pool1_pool (MaxPooling2D)   (None, 56, 56, 64)           0         ['pool1_pad[0][0]']           
+                                                                                                                    
+                    conv2_block1_preact_bn (Ba  (None, 56, 56, 64)           256       ['pool1_pool[0][0]']          
+                    tchNormalization)                                                                                
+                                                                                                                    
+                    conv2_block1_preact_relu (  (None, 56, 56, 64)           0         ['conv2_block1_preact_bn[0][0]
+                    Activation)                                                        ']                            
+                                                                                                                    
+                    conv2_block1_1_conv (Conv2  (None, 56, 56, 64)           4096      ['conv2_block1_preact_relu[0][
+                    D)                                                                 0]']                          
+                                                                                                                    
+                    conv2_block1_1_bn (BatchNo  (None, 56, 56, 64)           256       ['conv2_block1_1_conv[0][0]'] 
+                    rmalization)                                                                                     
+                    ...
+                    Total params: 59781194 (228.05 MB)
+                    Trainable params: 1449546 (5.53 MB)
+                    Non-trainable params: 58331648 (222.52 MB)
+                    __________________________________________________________________________________________________""")
+
+
+        st.subheader("And its validation accuracy is : 0.6026")
+
+        st.subheader("Lets see the training and validation loss and accuracy :")
+        st.image("Resnet_1.jpg", caption="loss", use_column_width=True)
+        st.image("Resnet_2.jpg", caption="accuracy", use_column_width=True)
+
+
+        st.write("Which is good but it could be much better!")
+
+
+
+
+    if model_choice == "Model 2 (Efficient net 1)":
+        st.subheader("First lets view the model summary :")
+        st.write("""Model: "model_2"
+                    __________________________________________________________________________________________________
+                    Layer (type)                Output Shape                 Param #   Connected to                  
+                    ==================================================================================================
+                    input_1 (InputLayer)        [(None, 224, 224, 3)]        0         []                            
+                                                                                                                    
+                    rescaling (Rescaling)       (None, 224, 224, 3)          0         ['input_1[0][0]']             
+                                                                                                                    
+                    normalization (Normalizati  (None, 224, 224, 3)          7         ['rescaling[0][0]']           
+                    on)                                                                                              
+                                                                                                                    
+                    rescaling_1 (Rescaling)     (None, 224, 224, 3)          0         ['normalization[0][0]']       
+                                                                                                                    
+                    stem_conv_pad (ZeroPadding  (None, 225, 225, 3)          0         ['rescaling_1[0][0]']         
+                    2D)                                                                                              
+                                                                                                                    
+                    stem_conv (Conv2D)          (None, 112, 112, 64)         1728      ['stem_conv_pad[0][0]']       
+                                                                                                                    
+                    stem_bn (BatchNormalizatio  (None, 112, 112, 64)         256       ['stem_conv[0][0]']           
+                    n)                                                                                               
+                                                                                                                    
+                    stem_activation (Activatio  (None, 112, 112, 64)         0         ['stem_bn[0][0]']             
+                    n)                                                                                               
+                    ...
+                    Total params: 65907681 (251.42 MB)
+                    Trainable params: 1809994 (6.90 MB)
+                    Non-trainable params: 64097687 (244.51 MB)
+                    __________________________________________________________________________________________________""")
+
+
+        st.subheader("And its validation accuracy is : 0.6114")
+
+        st.subheader("Lets see the training and validation loss and accuracy :")
+        st.image("Efficient_1_1.jpg", caption="loss", use_column_width=True)
+        st.image("Efficient_1_2.jpg", caption="accuracy", use_column_width=True)
+
+
+        st.write("Which is better still, but it could be even more so!")
 
 
 
 
 
+    if model_choice == "Model 3 (Efficient net 2)":
+        st.subheader("First lets view the model summary :")
+        st.write("""Model: "model_3"
+                    __________________________________________________________________________________________________
+                    Layer (type)                Output Shape                 Param #   Connected to                  
+                    ==================================================================================================
+                    input_1 (InputLayer)        [(None, 224, 224, 3)]        0         []                            
+                                                                                                                    
+                    rescaling (Rescaling)       (None, 224, 224, 3)          0         ['input_1[0][0]']             
+                                                                                                                    
+                    normalization (Normalizati  (None, 224, 224, 3)          7         ['rescaling[0][0]']           
+                    on)                                                                                              
+                                                                                                                    
+                    rescaling_1 (Rescaling)     (None, 224, 224, 3)          0         ['normalization[0][0]']       
+                                                                                                                    
+                    stem_conv_pad (ZeroPadding  (None, 225, 225, 3)          0         ['rescaling_1[0][0]']         
+                    2D)                                                                                              
+                                                                                                                    
+                    stem_conv (Conv2D)          (None, 112, 112, 64)         1728      ['stem_conv_pad[0][0]']       
+                                                                                                                    
+                    stem_bn (BatchNormalizatio  (None, 112, 112, 64)         256       ['stem_conv[0][0]']           
+                    n)                                                                                               
+                                                                                                                    
+                    stem_activation (Activatio  (None, 112, 112, 64)         0         ['stem_bn[0][0]']             
+                    n)                                                                                               
+                    ...
+                    Total params: 65907681 (251.42 MB)
+                    Trainable params: 26524746 (101.18 MB)
+                    Non-trainable params: 39382935 (150.23 MB)
+                    __________________________________________________________________________________________________""")
+
+
+        st.subheader("And its validation accuracy is : 0.6185")
+
+        st.subheader("Lets see the training and validation loss and accuracy :")
+        st.image("Efficient_2_1.jpg", caption="loss", use_column_width=True)
+        st.image("Efficient_2_2.jpg", caption="accuracy", use_column_width=True)
+
+
+        st.subheader("Now this is good, but remember, WE HAVE ADHD")
 
 
 
 
 
+    if model_choice == "Model 4 (Convex)":
+        st.subheader("First lets view the model summary :")
+        st.write("""Model: "model_4"
+                    __________________________________________________________________________________________________
+                    Layer (type)                Output Shape                 Param #   Connected to                  
+                    ==================================================================================================
+                    input_2 (InputLayer)        [(None, 224, 224, 3)]        0         []                            
+                                                                                                                    
+                    convnext_large_prestem_nor  (None, 224, 224, 3)          0         ['input_2[0][0]']             
+                    malization (Normalization)                                                                       
+                                                                                                                    
+                    convnext_large_stem (Seque  (None, 56, 56, 192)          9792      ['convnext_large_prestem_norma
+                    ntial)                                                             lization[0][0]']              
+                                                                                                                    
+                    convnext_large_stage_0_blo  (None, 56, 56, 192)          9600      ['convnext_large_stem[0][0]'] 
+                    ck_0_depthwise_conv (Conv2                                                                       
+                    D)                                                                                               
+                                                                                                                    
+                    convnext_large_stage_0_blo  (None, 56, 56, 192)          384       ['convnext_large_stage_0_block
+                    ck_0_layernorm (LayerNorma                                         _0_depthwise_conv[0][0]']     
+                    lization)                                                                                        
+                                                                                                                    
+                    convnext_large_stage_0_blo  (None, 56, 56, 768)          148224    ['convnext_large_stage_0_block
+                    ck_0_pointwise_conv_1 (Den                                         _0_layernorm[0][0]']          
+                    se)                                                                                              
+                                                                                                                    
+                    convnext_large_stage_0_blo  (None, 56, 56, 768)          0         ['convnext_large_stage_0_block
+                    ...
+                    Total params: 271505346 (1.01 GB)
+                    Trainable params: 75275010 (287.15 MB)
+                    Non-trainable params: 196230336 (748.56 MB)
+                    __________________________________________________________________________________________________""")
 
 
+        st.subheader("And its validation accuracy is : 0.7175 ")
+
+        st.subheader("Lets see the training and validation loss and accuracy :")
+        st.image("Convex_1.jpg", caption="loss", use_column_width=True)
+        st.image("Convex_2.jpg", caption="accuracy", use_column_width=True)
 
 
+        st.subheader("Is this enough to quench our thirst for KNOWLEDGE ?, probably not but we were out of time anyway =)")
 
 
+        st.write("We have saved the model's weight and structure to implement testing data on this network in the future. Following that, you can see a list of error rates and accuracy for both training and validation data over 18 epochs.")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        st.subheader("We can also view the confusion matrix :")
+        st.image("Confusion.jpg", caption="confusion matrix", use_column_width=True)
 
 
 
@@ -205,16 +358,10 @@ if report_choice == "Problem 2":
 
             # code
 
-            top_reviewers = pd.DataFrame(train.groupby('reviewerID').agg(Mean=('vote', np.mean),Sum=('vote', np.sum))).reset_index()
-            top_reviewers['Count'] = top_reviewers["Sum"]/ top_reviewers["Mean"]
-            top_reviewers.drop(columns=["Mean"], inplace=True)
-            top_reviewers = top_reviewers.sort_values(by='Sum', ascending=False)
-            top_10_reviewers = top_reviewers.head(10)
-            top_10_reviewer_info = top_10_reviewers.merge(train[['reviewerID', 'reviewerName']], on='reviewerID')
-            top_10_reviewer_info = top_10_reviewer_info.drop_duplicates(subset='reviewerName')
-            t10df = pd.DataFrame(top_10_reviewer_info[['reviewerName', 'Sum', "Count"]])
+            t10df = pd.read_csv("Q3.csv")
 
             # end code
+
             st.subheader("Top 10 reviewers with most votes.")
 
             st.write(t10df)
@@ -527,23 +674,20 @@ if report_choice == "Problem 2":
 
         # code 
 
-        train = pd.read_csv(r'D:\Sharif University of Tech\Data Sience Boot Camp\Project\Third Phaze\Second Problem\Data\train_finale.csv')
-        test = pd.read_csv(r'D:\Sharif University of Tech\Data Sience Boot Camp\Project\Third Phaze\Second Problem\Data\test_finale.csv')
-        train.drop(columns=["Unnamed: 0"], inplace=True)
-        test.drop(columns=["Unnamed: 0"], inplace=True)
-        train = train[["reviewText", "overall"]]
-        test = test[["reviewText"]]
-        undersampler = RandomUnderSampler(sampling_strategy={1: 50000, 2: 50000, 3: 50000, 4: 50000, 5: 50000}, random_state=78)
-        X_resampled, y_resampled = undersampler.fit_resample(train.drop(columns=["overall"]), train['overall'])
-        balanced_distribution = y_resampled.value_counts().sort_index()
+        balanced_distribution = pd.read_csv("temp.csv")
 
         # end code 
 
         st.subheader("After balancing the rating distribution would be :")
-        st.table(balanced_distribution)
+        st.dataframe(balanced_distribution)
 
 
         st.subheader("And the next procces would be to tokenize and lemmatize amd embedd the data.")
+
+        st.subheader("Some important parts of our data prep before implementing our models :")
+        st.image("functions.jpg", caption="functions in a nutshell", use_column_width=True)  
+        st.image("prep.jpg", caption="some importent prep", use_column_width=True)  
+
 
 
         st.header("Now that that's done lets implement some models :")
@@ -551,7 +695,7 @@ if report_choice == "Problem 2":
 
 
         st.subheader("Choose a Model to Display:")
-        model_choice = st.selectbox("Select a Model", ["SNN", "CNN", "RNN (LSTM)", "Test"])
+        model_choice = st.selectbox("Select a Model", ["SNN", "CNN", "RNN (LSTM)", "Bret", "Test"])
 
 
 
@@ -575,6 +719,12 @@ if report_choice == "Problem 2":
                 _________________________________________________________________
                 """)
             st.subheader("And its accuracy : 0.3649")
+
+            st.subheader("Now for this models utils :")
+            st.image("snn_utils.png", caption="utils", use_column_width=True)  
+
+            st.subheader("And at last the prediction bar chart :")
+            st.image("snn_bar.png", caption="prediction bar chart", use_column_width=True)  
 
 
             st.write("As we can see this model is not very appealing.")
@@ -605,11 +755,17 @@ if report_choice == "Problem 2":
                      """)
             st.subheader("And its accuracy : 0.4550")
 
+            st.subheader("Now for this models utils :")
+            st.image("cnn_utils.png", caption="utils", use_column_width=True)  
+
+            st.subheader("And at last the prediction bar chart :")
+            st.image("cnn_bar.png", caption="prediction bar chart", use_column_width=True)  
 
 
 
 
-        if model_choice == "RNN":
+
+        if model_choice == "RNN (LSTM)":
             st.subheader("The Summary for this model :")
             st.write("""
                 Model: "sequential_4"
@@ -630,6 +786,59 @@ if report_choice == "Problem 2":
                 """)
             st.subheader("And its accuracy : 0.5084")
 
+            st.subheader("Now for this models utils :")
+            st.image("rnn_utils.png", caption="utils", use_column_width=True)  
+
+            st.subheader("And at last the prediction bar chart :")
+            st.image("rnn_bar.png", caption="prediction bar chart", use_column_width=True)  
+
+
+
+        if model_choice == "Bret":
+            st.subheader("The Summary for this model :")
+            st.write("""Model: "model"
+                        __________________________________________________________________________________________________
+                        Layer (type)                Output Shape                 Param #   Connected to                  
+                        ==================================================================================================
+                        text (InputLayer)           [(None,)]                    0         []                            
+                                                                                                                        
+                        preprocessing (KerasLayer)  {'input_word_ids': (None,    0         ['text[0][0]']                
+                                                    128),                                                                
+                                                    'input_type_ids': (None,                                            
+                                                    128),                                                                
+                                                    'input_mask': (None, 128)                                           
+                                                    }                                                                    
+                                                                                                                        
+                        BERT_encoder (KerasLayer)   {'sequence_output': (None,   4385921   ['preprocessing[0][0]',       
+                                                    128, 128),                             'preprocessing[0][1]',       
+                                                    'encoder_outputs': [(None              'preprocessing[0][2]']       
+                                                    , 128, 128),                                                         
+                                                    (None, 128, 128)],                                                  
+                                                    'default': (None, 128),                                             
+                                                    'pooled_output': (None, 1                                           
+                                                    28)}                                                                 
+                                                                                                                        
+                        dropout (Dropout)           (None, 128)                  0         ['BERT_encoder[0][3]']        
+                                                                                                                        
+                        classifier (Dense)          (None, 5)                    645       ['dropout[0][0]']             
+                        ...
+                        Total params: 4386566 (16.73 MB)
+                        Trainable params: 4386565 (16.73 MB)
+                        Non-trainable params: 1 (1.00 Byte)
+                        __________________________________________________________________________________________________
+                """)
+            st.subheader("Bret utils diagram :")
+            st.image("bret_layer.png", caption="Bret utils diagram", use_column_width=True) 
+
+            st.subheader("The first 3 epoch :")
+            st.image("3_epoch.jpg", caption="first 3 epoch bret", use_column_width=True) 
+
+            st.subheader("And some final info on the model :")
+            st.image("info_bret.jpg", caption="Bret info", use_column_width=True) 
+
+
+
+
 
 
 
@@ -647,8 +856,10 @@ if report_choice == "Problem 2":
                 st.write(f"The example is {score:.2f}% {label}")
 
 
+        st.write("""Now that we have tried different hand-made models respective to GloVe embedding and NaiveBayes Classifier (not mentioned in the notebook), we will use BERT pre-trained model to check for significant increase in Accuracy.""")
 
-
+        st.subheader("And the final models prediction bar chart :")
+        st.image("final_bar.png", caption="Bret final pred bar chart", use_column_width=True) 
 
 
 
